@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vitamin's Mail · takemyvitamins.lol</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ----------------------------------------------
+           PREMIUM BLACK & SILVER THEME + ANIMATIONS
+           Minimalist · no emojis · proper scaling
+        ------------------------------------------------ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        html {
+            font-size: 16px;
+        }
+
+        body {
+            background: #0b0d10;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 20% 30%, #1a1e24 0%, #07090b 100%);
+            z-index: -2;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9Ii44IiBudW1PY3RhdmVzPSI0IiBzdGl0Y2hUaWxlcz0ic3RpdGNoIiAvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNub2lzZSkiIG9wYWNpdHk9IjAuMDQiIC8+PC9zdmc+');
+            opacity: 0.15;
+            z-index: -1;
+            pointer-events: none;
+            animation: grainShift 8s steps(2) infinite;
+        }
+
+        @keyframes grainShift {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(-5%, -5%); }
+            100% { transform: translate(0, 0); }
+        }
+
+        /* ---------- MAIN CARD ---------- */
+        .card {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(18, 22, 28, 0.75);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(192, 192, 192, 0.12);
+            border-radius: 3rem;
+            box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+            padding: 2rem 2.5rem 2.5rem;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            animation: cardGlow 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes cardGlow {
+            0% { box-shadow: 0 40px 80px -20px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.02) inset; }
+            100% { box-shadow: 0 40px 80px -10px rgba(192,192,192,0.08), 0 0 0 1px rgba(255,255,255,0.08) inset; }
+        }
+
+        /* ---------- LOGIN ---------- */
+        #loginOverlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(6, 8, 12, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        #loginOverlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .login-box {
+            background: rgba(20, 24, 30, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(192, 192, 192, 0.12);
+            border-radius: 2.5rem;
+            padding: 2.8rem 3rem;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 40px 80px -20px #000, 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+            text-align: center;
+            animation: slideUpFade 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateY(30px) scale(0.96); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .login-box i {
+            font-size: 2.8rem;
+            color: #d4d4d4;
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(0 0 12px rgba(192,192,192,0.1));
+        }
+
+        .login-box h2 {
+            font-weight: 600;
+            color: #e8e8e8;
+            letter-spacing: -0.02em;
+            font-size: 1.8rem;
+        }
+
+        .login-box p {
+            color: #9aa6b5;
+            font-size: 0.9rem;
+            margin-bottom: 1.8rem;
+            opacity: 0.7;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 0.9rem 1.4rem;
+            border: 1px solid rgba(192, 192, 192, 0.12);
+            border-radius: 60px;
+            font-size: 1rem;
+            background: rgba(0, 0, 0, 0.4);
+            color: #f0f0f0;
+            outline: none;
+            transition: 0.25s ease;
+        }
+
+        .login-box input:focus {
+            border-color: #b0b8c8;
+            box-shadow: 0 0 0 4px rgba(192, 192, 192, 0.06);
+            background: rgba(20, 24, 30, 0.6);
+        }
+
+        .login-box input::placeholder {
+            color: #6a7a8a;
+        }
+
+        .login-box button {
+            width: 100%;
+            margin-top: 1.2rem;
+            background: linear-gradient(145deg, #2a2f38, #171b21);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            color: #eaeaea;
+            font-weight: 600;
+            padding: 0.9rem;
+            border-radius: 60px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.25s ease;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            letter-spacing: 0.3px;
+        }
+
+        .login-box button:hover {
+            background: #2f3540;
+            border-color: rgba(192, 192, 192, 0.15);
+            transform: scale(0.98);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8);
+        }
+
+        .login-error {
+            color: #d4a0a0;
+            font-size: 0.85rem;
+            margin-top: 0.8rem;
+            min-height: 1.6rem;
+            letter-spacing: 0.2px;
+        }
+
+        /* ---------- HEADER ---------- */
+        .flex-row {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            color: #ececec;
+        }
+
+        .domain-badge {
+            background: rgba(192, 192, 192, 0.06);
+            color: #c8d0dc;
+            font-size: 0.7rem;
+            font-weight: 500;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(4px);
+            letter-spacing: 0.2px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .domain-badge:hover {
+            background: rgba(192, 192, 192, 0.1);
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 1px solid rgba(192, 192, 192, 0.06);
+            color: #9aa8b8;
+            font-size: 0.8rem;
+            cursor: pointer;
+            padding: 0.3rem 1.2rem;
+            border-radius: 40px;
+            transition: 0.2s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .logout-btn:hover {
+            background: rgba(192, 192, 192, 0.05);
+            color: #e0e0e0;
+            border-color: rgba(192, 192, 192, 0.12);
+            transform: scale(0.96);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        /* ---------- LAYOUT GRID ---------- */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1.2fr 2fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* ---------- INBOX PANEL ---------- */
+        .inbox-panel {
+            background: rgba(10, 13, 18, 0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 1.8rem;
+            padding: 1.25rem 0.25rem 0.5rem 0;
+            border: 1px solid rgba(192, 192, 192, 0.04);
+            transition: 0.3s ease;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 0.75rem 0.75rem 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .panel-header h3 {
+            font-weight: 500;
+            font-size: 1rem;
+            color: #ccd6e0;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            letter-spacing: 0.2px;
+        }
+
+        .refresh-btn {
+            background: rgba(192, 192, 192, 0.03);
+            border: 1px solid rgba(192, 192, 192, 0.04);
+            color: #8f9db0;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            transition: 0.2s ease;
+        }
+
+        .refresh-btn:hover {
+            background: rgba(192, 192, 192, 0.06);
+            color: #d0d8e0;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.3rem;
+            padding: 0 0.75rem 0.75rem 0.75rem;
+            border-bottom: 1px solid rgba(192, 192, 192, 0.04);
+            flex-shrink: 0;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: #8f9db0;
+            padding: 0.35rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s ease;
+            letter-spacing: 0.2px;
+        }
+
+        .tab-btn:hover {
+            color: #c8d4e0;
+            background: rgba(192, 192, 192, 0.04);
+        }
+
+        .tab-btn.active {
+            color: #e8e8e8;
+            background: rgba(192, 192, 192, 0.08);
+            border: 1px solid rgba(192, 192, 192, 0.06);
+        }
+
+        /* Message list */
+        .message-list {
+            list-style: none;
+            margin-top: 0.4rem;
+            padding-right: 0.2rem;
+            flex: 1;
+            overflow-y: auto;
+            min-height: 200px;
+            max-height: 420px;
+        }
+
+        .message-list li {
+            background: rgba(18, 22, 28, 0.5);
+            backdrop-filter: blur(4px);
+            padding: 0.8rem 0.9rem 0.8rem 1rem;
+            margin: 0 0.2rem 0.3rem 0.2rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(192, 192, 192, 0.03);
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+            animation: msgSlide 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            cursor: pointer;
+        }
+
+        .message-list li:hover {
+            border-color: rgba(192, 192, 192, 0.1);
+            background: rgba(30, 36, 44, 0.6);
+            transform: scale(1.005);
+        }
+
+        @keyframes msgSlide {
+            0% { opacity: 0; transform: translateX(-8px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        .msg-sender {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #e0e8f0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .msg-sender small {
+            font-weight: 400;
+            color: #7a8a9a;
+            font-size: 0.65rem;
+        }
+
+        .msg-subject {
+            font-size: 0.85rem;
+            color: #c8d4e0;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .msg-preview {
+            font-size: 0.75rem;
+            color: #7f8e9e;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .msg-to {
+            font-size: 0.65rem;
+            color: #6a7a8a;
+            margin-top: 2px;
+        }
+
+        .msg-badge {
+            font-size: 0.55rem;
+            padding: 0.05rem 0.5rem;
+            border-radius: 20px;
+            background: rgba(192, 192, 192, 0.04);
+            border: 1px solid rgba(192, 192, 192, 0.04);
+            color: #8f9db0;
+            display: inline-block;
+            margin-top: 2px;
+            letter-spacing: 0.3px;
+        }
+
+        .empty-inbox {
+            padding: 2rem 0.5rem;
+            text-align: center;
+            color: #6a7a8a;
+            font-size: 0.85rem;
+        }
+
+        /* ---------- COMPOSE PANEL ---------- */
+        .compose-panel {
+            background: rgba(10, 13, 18, 0.4);
+            backdrop-filter: blur(8px);
+            border-radius: 1.8rem;
+            padding: 1.25rem 1.5rem 1.5rem;
+            border: 1px solid rgba(192, 192, 192, 0.04);
+        }
+
+        .compose-panel h3 {
+            font-weight: 500;
+            font-size: 1rem;
+            color: #ccd6e0;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(192, 192, 192, 0.04);
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            letter-spacing: 0.2px;
+        }
+
+        .form-group {
+            margin-bottom: 0.9rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #9aabbe;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            opacity: 0.7;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 1px solid rgba(192, 192, 192, 0.06);
+            border-radius: 1rem;
+            font-size: 0.9rem;
+            background: rgba(0, 0, 0, 0.3);
+            color: #e0e8f0;
+            transition: 0.25s ease;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: rgba(192, 192, 192, 0.15);
+            box-shadow: 0 0 0 4px rgba(192, 192, 192, 0.02);
+            background: rgba(20, 24, 30, 0.5);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #5a6a7a;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .from-preview {
+            font-size: 0.8rem;
+            color: #9aabbe;
+            padding: 0.2rem 0 0.2rem 0.5rem;
+            opacity: 0.8;
+            border-left: 2px solid rgba(192, 192, 192, 0.08);
+            margin-top: -0.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .from-preview span {
+            color: #c8d4e0;
+            font-weight: 500;
+        }
+
+        .send-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.6rem;
+            margin-top: 0.25rem;
+        }
+
+        .send-btn {
+            background: linear-gradient(145deg, #2a303a, #191e24);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            color: #eaeaea;
+            font-weight: 500;
+            padding: 0.6rem 1.8rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: 0.2s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            letter-spacing: 0.3px;
+        }
+
+        .send-btn:hover {
+            background: #353d48;
+            border-color: rgba(192, 192, 192, 0.08);
+            transform: scale(0.98);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+        }
+
+        .status-msg {
+            font-size: 0.75rem;
+            color: #a0b0c0;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.25rem 1rem;
+            border-radius: 30px;
+            display: inline-block;
+            transition: 0.3s ease;
+            border: 1px solid rgba(192, 192, 192, 0.02);
+        }
+
+        .status-msg.error {
+            background: rgba(180, 60, 60, 0.12);
+            color: #dbb0b0;
+            border-color: rgba(200, 80, 80, 0.08);
+        }
+
+        .api-hint {
+            margin-top: 1.5rem;
+            font-size: 0.7rem;
+            color: #6a7a8a;
+            border-top: 1px solid rgba(192, 192, 192, 0.04);
+            padding-top: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .api-hint code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.15rem 0.6rem;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            color: #b0c0d0;
+            border: 1px solid rgba(192, 192, 192, 0.04);
+        }
+
+        .badge-domain {
+            background: rgba(192, 192, 192, 0.03);
+            padding: 0.15rem 1rem;
+            border-radius: 40px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            color: #a0b0c0;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        /* ---------- DETAIL OVERLAY ---------- */
+        #detailOverlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(6, 8, 12, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            padding: 2rem;
+        }
+
+        #detailOverlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .detail-box {
+            background: rgba(18, 22, 28, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(192, 192, 192, 0.1);
+            border-radius: 2.5rem;
+            padding: 2.5rem;
+            max-width: 680px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 40px 80px -20px #000, 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+            animation: slideUpFade 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .detail-box::-webkit-scrollbar {
+            width: 4px;
+        }
+        .detail-box::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .detail-box::-webkit-scrollbar-thumb {
+            background: rgba(192, 192, 192, 0.12);
+            border-radius: 10px;
+        }
+
+        .detail-close {
+            float: right;
+            background: transparent;
+            border: 1px solid rgba(192, 192, 192, 0.06);
+            color: #9aa8b8;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .detail-close:hover {
+            background: rgba(192, 192, 192, 0.06);
+            color: #e0e0e0;
+            transform: scale(0.95);
+        }
+
+        .detail-header {
+            margin-top: 0.3rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(192, 192, 192, 0.04);
+            padding-bottom: 1rem;
+        }
+
+        .detail-subject {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #ececec;
+            margin-bottom: 0.6rem;
+        }
+
+        .detail-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+            font-size: 0.85rem;
+            color: #9aabbe;
+        }
+
+        .detail-meta span {
+            color: #c8d4e0;
+        }
+
+        .detail-body {
+            color: #d0d8e0;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .detail-badge {
+            display: inline-block;
+            font-size: 0.6rem;
+            padding: 0.15rem 0.7rem;
+            border-radius: 20px;
+            background: rgba(192, 192, 192, 0.04);
+            border: 1px solid rgba(192, 192, 192, 0.04);
+            color: #8f9db0;
+            margin-top: 0.2rem;
+            letter-spacing: 0.3px;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 900px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .card {
+                padding: 1.5rem;
+                border-radius: 2rem;
+            }
+            .login-box {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+            .message-list {
+                max-height: 320px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            html {
+                font-size: 14px;
+            }
+            .card {
+                padding: 1rem;
+                border-radius: 1.5rem;
+            }
+            .compose-panel {
+                padding: 1rem;
+            }
+            .detail-box {
+                padding: 1.5rem;
+                margin: 0.5rem;
+            }
+            .login-box {
+                padding: 1.5rem 1.2rem;
+            }
+            h1 {
+                font-size: 1.4rem;
+            }
+            .tabs {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        /* scrollbar global */
+        .message-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .message-list::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        .message-list::-webkit-scrollbar-thumb {
+            background: rgba(192, 192, 192, 0.1);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- LOGIN OVERLAY -->
+    <div id="loginOverlay">
+        <div class="login-box">
+            <i class="fas fa-shield-alt"></i>
+            <h2>Secure Access</h2>
+            <p>Vitamin's Mail · takemyvitamins.lol</p>
+            <input type="password" id="passwordInput" placeholder="Enter password" autofocus />
+            <button id="loginBtn"><i class="fas fa-unlock-alt" style="margin-right: 8px;"></i> Unlock</button>
+            <div id="loginError" class="login-error"></div>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div class="card" id="mainApp" style="display: none;">
+        <!-- Header -->
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+            <div class="flex-row">
+                <h1>
+                    <i class="fas fa-envelope" style="color: #c8d0dc;"></i> Vitamin's Mail
+                    <span class="domain-badge" id="domainBadge"><i class="fas fa-globe"></i> takemyvitamins.lol</span>
+                </h1>
+            </div>
+            <div class="header-right">
+                <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <!-- LEFT: Inbox -->
+            <div class="inbox-panel">
+                <div class="panel-header">
+                    <h3><i class="fas fa-inbox" style="color: #b0c0d0;"></i> Mailbox</h3>
+                    <button class="refresh-btn" id="refreshInboxBtn"><i class="fas fa-sync-alt"></i></button>
+                </div>
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="received" id="tabReceived"><i class="fas fa-arrow-down"></i> Received</button>
+                    <button class="tab-btn" data-tab="sent" id="tabSent"><i class="fas fa-arrow-up"></i> Sent</button>
+                </div>
+                <ul class="message-list" id="inboxList">
+                    <li style="justify-content: center; background: transparent; border: none; box-shadow: none; padding: 1.8rem 0.5rem; cursor: default;">
+                        <div class="empty-inbox">
+                            <i class="fas fa-cloud-download-alt" style="font-size: 1.4rem; opacity: 0.3; display: block; margin-bottom: 8px;"></i>
+                            <span>All @takemyvitamins.lol emails appear here</span>
+                            <span style="display: block; font-size: 0.7rem; margin-top: 6px; opacity: 0.4;">(click refresh to sync)</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- RIGHT: Compose -->
+            <div class="compose-panel">
+                <h3><i class="fas fa-pen-fancy" style="color: #b0c0d0;"></i> Compose</h3>
+                <form id="sendEmailForm">
+                    <div class="form-group">
+                        <label><i class="far fa-user"></i> From Name</label>
+                        <input type="text" id="fromNameInput" placeholder="sender" value="" />
+                        <div class="from-preview">
+                            <i class="fas fa-arrow-right" style="margin-right: 6px; font-size: 0.7rem;"></i> 
+                            Sends as: <span id="fromPreview">sender@takemyvitamins.lol</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="far fa-envelope"></i> To</label>
+                        <input type="email" id="toEmail" placeholder="recipient@example.com" required />
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-tag"></i> Subject</label>
+                        <input type="text" id="subjectInput" placeholder="Subject" />
+                    </div>
+                    <div class="form-group">
+                        <label><i class="far fa-comment-dots"></i> Message</label>
+                        <textarea id="bodyInput" placeholder="Write your message..."></textarea>
+                    </div>
+                    <div class="send-row">
+                        <span id="sendStatus" class="status-msg"><i class="fas fa-circle" style="font-size: 0.3rem; vertical-align: middle; margin-right: 6px; color: #7a8a9a;"></i> ready</span>
+                        <button type="submit" class="send-btn" id="sendBtn"><i class="fas fa-paper-plane"></i> Send</button>
+                    </div>
+                </form>
+                <div class="api-hint">
+                    <span><i class="fas fa-key" style="margin-right: 6px;"></i> API: <code>re_••••••••</code></span>
+                    <span class="badge-domain"><i class="fas fa-check-circle" style="color: #8aa8c0;"></i> active</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DETAIL OVERLAY -->
+    <div id="detailOverlay">
+        <div class="detail-box" id="detailBox">
+            <button class="detail-close" id="detailClose"><i class="fas fa-times"></i></button>
+            <div class="detail-header">
+                <div class="detail-subject" id="detailSubject">Subject</div>
+                <div class="detail-meta">
+                    <div><i class="far fa-user" style="width: 20px;"></i> From: <span id="detailFrom">—</span></div>
+                    <div><i class="far fa-envelope" style="width: 20px;"></i> To: <span id="detailTo">—</span></div>
+                    <div><i class="far fa-calendar-alt" style="width: 20px;"></i> Date: <span id="detailDate">—</span></div>
+                    <div><span class="detail-badge" id="detailBadge">Received</span></div>
+                </div>
+            </div>
+            <div class="detail-body" id="detailBody">Email content goes here...</div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ---------- CONFIG ----------
+            const CORRECT_PASSWORD = 'Trumpet70%Azuzws8fcb!';
+            const RESEND_API_KEY = 're_ZMQ9Fkdy_FKaEB9tEBgnhBLZ8NMm2zwX8';
+            const RESEND_API_URL = 'https://api.resend.com/emails';
+            const DOMAIN = 'takemyvitamins.lol';
+            const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                ? 'http://localhost:3000' 
+                : 'https://your-backend-url.com'; // ← UPDATE THIS FOR PRODUCTION
+
+            // DOM refs
+            const loginOverlay = document.getElementById('loginOverlay');
+            const mainApp = document.getElementById('mainApp');
+            const passwordInput = document.getElementById('passwordInput');
+            const loginBtn = document.getElementById('loginBtn');
+            const loginError = document.getElementById('loginError');
+            const logoutBtn = document.getElementById('logoutBtn');
+
+            const inboxList = document.getElementById('inboxList');
+            const refreshBtn = document.getElementById('refreshInboxBtn');
+            const sendForm = document.getElementById('sendEmailForm');
+            const fromNameInput = document.getElementById('fromNameInput');
+            const fromPreview = document.getElementById('fromPreview');
+            const toInput = document.getElementById('toEmail');
+            const subjectInput = document.getElementById('subjectInput');
+            const bodyInput = document.getElementById('bodyInput');
+            const sendStatus = document.getElementById('sendStatus');
+            const sendBtn = document.getElementById('sendBtn');
+            const domainBadge = document.getElementById('domainBadge');
+            const tabReceived = document.getElementById('tabReceived');
+            const tabSent = document.getElementById('tabSent');
+
+            const detailOverlay = document.getElementById('detailOverlay');
+            const detailClose = document.getElementById('detailClose');
+            const detailSubject = document.getElementById('detailSubject');
+            const detailFrom = document.getElementById('detailFrom');
+            const detailTo = document.getElementById('detailTo');
+            const detailDate = document.getElementById('detailDate');
+            const detailBadge = document.getElementById('detailBadge');
+            const detailBody = document.getElementById('detailBody');
+
+            let currentTab = 'received';
+
+            // ---------- UPDATE FROM PREVIEW ----------
+            function updateFromPreview() {
+                const name = fromNameInput.value.trim() || 'sender';
+                const email = `${name.toLowerCase().replace(/\s/g, '.')}@${DOMAIN}`;
+                fromPreview.textContent = `${name} <${email}>`;
+            }
+
+            fromNameInput.addEventListener('input', updateFromPreview);
+            fromNameInput.placeholder = 'sender';
+            updateFromPreview();
+
+            // ---------- LOGIN ----------
+            function doLogin() {
+                const pwd = passwordInput.value.trim();
+                if (pwd === CORRECT_PASSWORD) {
+                    loginOverlay.classList.add('hidden');
+                    mainApp.style.display = 'block';
+                    loginError.textContent = '';
+                    passwordInput.value = '';
+                    fromNameInput.focus();
+                    renderInbox();
+                } else {
+                    loginError.textContent = 'Incorrect password. Try again.';
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                }
+            }
+
+            loginBtn.addEventListener('click', doLogin);
+            passwordInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') doLogin();
+            });
+
+            logoutBtn.addEventListener('click', function() {
+                mainApp.style.display = 'none';
+                loginOverlay.classList.remove('hidden');
+                loginError.textContent = '';
+                passwordInput.value = '';
+                passwordInput.focus();
+            });
+
+            // ---------- API CALLS ----------
+            async function fetchEmails(type) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/emails/${type}`);
+                    if (!response.ok) throw new Error('Failed to fetch emails');
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error fetching emails:', error);
+                    // Fallback to mock data if backend is not available
+                    return getMockData(type);
+                }
+            }
+
+            function getMockData(type) {
+                const mockData = {
+                    received: [
+                        { id: 1, from: 'welcome@resend.dev', to: 'anyone@takemyvitamins.lol', subject: 'Welcome to Resend', preview: 'Thanks for using Resend with your custom domain.', body: 'Welcome to Resend!\n\nThanks for using Resend with your custom domain.', date: '2h ago' },
+                        { id: 2, from: 'team@takemyvitamins.lol', to: 'support@takemyvitamins.lol', subject: 'Domain verified', preview: 'Your domain is ready.', body: 'Domain Verified\n\nYour domain has been verified.', date: '1d ago' }
+                    ],
+                    sent: [
+                        { id: 101, from: 'sender <me@takemyvitamins.lol>', to: 'client@example.com', subject: 'Proposal update', preview: 'Here is the latest proposal.', body: 'Dear Client,\n\nHere is the latest proposal.', date: '1h ago' }
+                    ]
+                };
+                return mockData[type] || [];
+            }
+
+            async function saveSentEmail(email) {
+                try {
+                    await fetch(`${API_BASE_URL}/api/sent`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(email)
+                    });
+                } catch (error) {
+                    console.error('Error saving sent email:', error);
+                }
+            }
+
+            // ---------- RENDER INBOX ----------
+            async function renderInbox() {
+                const messages = await fetchEmails(currentTab);
+                
+                inboxList.innerHTML = '';
+                if (!messages || messages.length === 0) {
+                    inboxList.innerHTML = `
+                        <li style="justify-content: center; background: transparent; border: none; box-shadow: none; padding: 1.8rem 0.5rem; cursor: default;">
+                            <div class="empty-inbox">
+                                <i class="fas fa-${currentTab === 'received' ? 'inbox' : 'paper-plane'}" style="font-size: 1.4rem; opacity: 0.2; display: block; margin-bottom: 8px;"></i>
+                                <span>No ${currentTab} messages</span>
+                                <span style="display: block; font-size: 0.7rem; margin-top: 6px; opacity: 0.4;">${currentTab === 'received' ? 'All @' + DOMAIN + ' emails appear here' : 'All emails you\'ve sent appear here'}</span>
+                            </div>
+                        </li>
+                    `;
+                    return;
+                }
+
+                messages.forEach(msg => {
+                    const li = document.createElement('li');
+                    li.setAttribute('data-id', msg.id);
+                    li.setAttribute('data-tab', currentTab);
+                    const displayFrom = currentTab === 'received' ? msg.from : msg.from;
+                    const displayTo = currentTab === 'received' ? msg.to : msg.to;
+                    li.innerHTML = `
+                        <div class="msg-sender">
+                            <span>${displayFrom || 'unknown'}</span>
+                            <small>${msg.date || 'just now'}</small>
+                        </div>
+                        <div class="msg-subject">${msg.subject || '(no subject)'}</div>
+                        <div class="msg-preview">${msg.preview || ''}</div>
+                        <div class="msg-to">
+                            <i class="far fa-${currentTab === 'received' ? 'envelope' : 'paper-plane'}" style="font-size:0.6rem;"></i> 
+                            ${displayTo || 'unknown'}
+                            <span class="msg-badge">${currentTab === 'received' ? 'in' : 'out'}</span>
+                        </div>
+                    `;
+                    li.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        const tab = this.getAttribute('data-tab');
+                        openDetail(id, tab);
+                    });
+                    inboxList.appendChild(li);
+                });
+            }
+
+            // ---------- TAB SWITCHING ----------
+            tabReceived.addEventListener('click', function() {
+                currentTab = 'received';
+                tabReceived.classList.add('active');
+                tabSent.classList.remove('active');
+                renderInbox();
+            });
+
+            tabSent.addEventListener('click', function() {
+                currentTab = 'sent';
+                tabSent.classList.add('active');
+                tabReceived.classList.remove('active');
+                renderInbox();
+            });
+
+            // ---------- DETAIL VIEW ----------
+            async function openDetail(id, tab) {
+                const messages = await fetchEmails(tab);
+                const msg = messages.find(m => m.id === id);
+                if (!msg) return;
+
+                detailSubject.textContent = msg.subject || '(no subject)';
+                detailFrom.textContent = msg.from || 'unknown';
+                detailTo.textContent = msg.to || 'unknown';
+                detailDate.textContent = msg.date || 'unknown';
+                detailBadge.textContent = tab === 'received' ? 'Received' : 'Sent';
+                detailBadge.style.color = tab === 'received' ? '#8aa8c0' : '#c0a88a';
+                detailBody.textContent = msg.body || '(empty message)';
+
+                detailOverlay.classList.add('visible');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeDetail() {
+                detailOverlay.classList.remove('visible');
+                document.body.style.overflow = '';
+            }
+
+            detailClose.addEventListener('click', closeDetail);
+            detailOverlay.addEventListener('click', function(e) {
+                if (e.target === this) closeDetail();
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeDetail();
+            });
+
+            // ---------- REFRESH ----------
+            refreshBtn.addEventListener('click', function() {
+                renderInbox();
+                sendStatus.textContent = 'Inbox refreshed';
+                sendStatus.className = 'status-msg';
+                setTimeout(() => {
+                    sendStatus.textContent = 'ready';
+                    sendStatus.className = 'status-msg';
+                }, 1500);
+            });
+
+            // ---------- SEND EMAIL ----------
+            sendForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const name = fromNameInput.value.trim() || 'sender';
+                const fromEmail = `${name.toLowerCase().replace(/\s/g, '.')}@${DOMAIN}`;
+                const from = `${name} <${fromEmail}>`;
+                const to = toInput.value.trim();
+                const subject = subjectInput.value.trim() || '(no subject)';
+                const body = bodyInput.value.trim() || ' ';
+
+                if (!to) {
+                    sendStatus.textContent = 'To address required';
+                    sendStatus.className = 'status-msg error';
+                    return;
+                }
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(to)) {
+                    sendStatus.textContent = 'Valid recipient email required';
+                    sendStatus.className = 'status-msg error';
+                    return;
+                }
+
+                const payload = {
+                    from: from,
+                    to: [to],
+                    subject: subject,
+                    html: `<p>${body.replace(/\n/g, '<br>')}</p>`,
+                    text: body
+                };
+
+                sendBtn.disabled = true;
+                sendBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Sending...';
+                sendStatus.textContent = 'sending...';
+                sendStatus.className = 'status-msg';
+
+                try {
+                    const response = await fetch(RESEND_API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${RESEND_API_KEY}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await response.json();
+                    if (!response.ok) throw new Error(result.message || 'Resend API error');
+                    sendStatus.textContent = `Sent! ID: ${result.id || 'ok'}`;
+                    sendStatus.className = 'status-msg';
+
+                    // Save to backend
+                    await saveSentEmail({
+                        from: from,
+                        to: to,
+                        subject: subject,
+                        preview: body.substring(0, 60) + (body.length > 60 ? '...' : ''),
+                        body: body
+                    });
+
+                    renderInbox();
+                    toInput.value = '';
+                    subjectInput.value = '';
+                    bodyInput.value = '';
+
+                } catch (err) {
+                    sendStatus.textContent = `Error: ${err.message}`;
+                    sendStatus.className = 'status-msg error';
+                } finally {
+                    sendBtn.disabled = false;
+                    sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send';
+                }
+            });
+
+            // Domain badge click sets sender name
+            domainBadge.addEventListener('click', function() {
+                fromNameInput.value = 'sender';
+                updateFromPreview();
+                sendStatus.textContent = 'from name set';
+                sendStatus.className = 'status-msg';
+                setTimeout(() => {
+                    sendStatus.textContent = 'ready';
+                    sendStatus.className = 'status-msg';
+                }, 1000);
+            });
+
+            // Initial render
+            renderInbox();
+        })();
+    </script>
+</body>
+</html>
