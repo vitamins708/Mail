@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: vitamins-mail-backend
+    runtime: node
+    repo: https://github.com/your-username/your-repo
+    plan: free
+    region: oregon
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: RESEND_API_KEY
+        value: re_ZMQ9Fkdy_FKaEB9tEBgnhBLZ8NMm2zwX8
+      - key: DOMAIN
+        value: takemyvitamins.lol
+      - key: WEBHOOK_SECRET
+        generateValue: true
+    healthCheckPath: /api/health
+
+  - type: static
+    name: vitamins-mail-frontend
+    repo: https://github.com/your-username/your-repo
+    plan: free
+    region: oregon
+    buildCommand: echo "Static site - no build needed"
+    publishPath: frontend
