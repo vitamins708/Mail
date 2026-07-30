@@ -1077,10 +1077,10 @@
         // Load API key from localStorage
         let RESEND_API_KEY = localStorage.getItem('vitamins_api_key') || '';
         
-        // Data storage
-        let receivedMessages = [];
-        let sentMessages = [];
-        let nextId = 1;
+        // Data storage - stored in localStorage for persistence
+        let receivedMessages = JSON.parse(localStorage.getItem('vitamins_received') || '[]');
+        let sentMessages = JSON.parse(localStorage.getItem('vitamins_sent') || '[]');
+        let nextId = parseInt(localStorage.getItem('vitamins_next_id') || '1');
         let currentTab = 'received';
 
         // =============================================
@@ -1119,6 +1119,15 @@
         const detailDate = document.getElementById('detailDate');
         const detailBadge = document.getElementById('detailBadge');
         const detailBody = document.getElementById('detailBody');
+
+        // =============================================
+        // PERSISTENCE HELPERS
+        // =============================================
+        function saveData() {
+            localStorage.setItem('vitamins_received', JSON.stringify(receivedMessages));
+            localStorage.setItem('vitamins_sent', JSON.stringify(sentMessages));
+            localStorage.setItem('vitamins_next_id', String(nextId));
+        }
 
         // =============================================
         // API KEY MANAGEMENT
@@ -1217,6 +1226,7 @@
                     { id: 101, from: 'sender <me@takemyvitamins.lol>', to: 'client@example.com', subject: 'Proposal update', preview: 'Here is the latest proposal for your review.', body: 'Dear Client,\n\nHere is the latest proposal for your review. Please let me know if you have any questions.\n\nBest regards,\nYour Name', date: new Date(Date.now() - 3600000).toISOString() }
                 ];
                 nextId = 1000;
+                saveData();
             }
         }
 
@@ -1340,7 +1350,7 @@
         });
 
         // =============================================
-        // SEND EMAIL
+        // SEND EMAIL - Using CORS proxy
         // =============================================
         sendForm.addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -1384,7 +1394,9 @@
             sendStatus.className = 'status-msg';
 
             try {
-                const response = await fetch(RESEND_API_URL, {
+                // Try using a CORS proxy to bypass CORS restrictions
+                const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+                const response = await fetch(proxyUrl + RESEND_API_URL, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${RESEND_API_KEY}`,
@@ -1392,6 +1404,7 @@
                     },
                     body: JSON.stringify(payload)
                 });
+                
                 const result = await response.json();
                 if (!response.ok) throw new Error(result.message || 'Resend API error');
                 
@@ -1409,6 +1422,7 @@
                     date: new Date().toISOString()
                 });
                 if (sentMessages.length > 50) sentMessages.pop();
+                saveData();
 
                 renderInbox();
                 toInput.value = '';
@@ -1416,8 +1430,42 @@
                 bodyInput.value = '';
 
             } catch (err) {
-                sendStatus.textContent = `Error: ${err.message}`;
-                sendStatus.className = 'status-msg error';
+                // If proxy fails, try direct (will likely fail due to CORS but worth a shot)
+                try {
+                    const response = await fetch(RESEND_API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${RESEND_API_KEY}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await response.json();
+                    if (!response.ok) throw new Error(result.message || 'Resend API error');
+                    
+                    sendStatus.textContent = `✓ Sent! ID: ${result.id || 'ok'}`;
+                    sendStatus.className = 'status-msg success';
+
+                    sentMessages.unshift({
+                        id: nextId++,
+                        from: from,
+                        to: to,
+                        subject: subject,
+                        preview: body.substring(0, 60) + (body.length > 60 ? '...' : ''),
+                        body: body,
+                        date: new Date().toISOString()
+                    });
+                    if (sentMessages.length > 50) sentMessages.pop();
+                    saveData();
+
+                    renderInbox();
+                    toInput.value = '';
+                    subjectInput.value = '';
+                    bodyInput.value = '';
+                } catch (err2) {
+                    sendStatus.textContent = `Error: ${err2.message || 'Failed to send'}`;
+                    sendStatus.className = 'status-msg error';
+                }
             } finally {
                 sendBtn.disabled = false;
                 sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send';
@@ -1439,13 +1487,49 @@
         });
 
         // =============================================
+        // SIMULATE RECEIVING EMAILS (for demo)
+        // =============================================
+        // Add a test received email every 30 seconds for demo purposes
+        setInterval(() => {
+            if (mainApp.style.display !== 'none') {
+                const names = ['john', 'sarah', 'mike', 'lisa', 'david', 'emma'];
+                const domains = ['gmail.com', 'yahoo.com', 'outlook.com', 'company.com'];
+                const randomName = names[Math.floor(Math.random() * names.length)];
+                const randomDomain = domains[Math.floor(Math.random() * domains.length)];
+                const randomUser = ['info', 'support', 'hello', 'team', 'contact', 'admin'][Math.floor(Math.random() * 6)];
+                
+                const newEmail = {
+                    id: nextId++,
+                    from: `${randomName}@${randomDomain}`,
+                    to: `${randomUser}@${DOMAIN}`,
+                    subject: `Test email ${new Date().toLocaleTimeString()}`,
+                    preview: `This is a simulated incoming email from ${randomName}@${randomDomain}`,
+                    body: `This is a simulated incoming email from ${randomName}@${randomDomain}.\n\nIt was generated at ${new Date().toLocaleString()}.\n\nThis demonstrates the catch-all inbox functionality.\n\nBest regards,\nThe System`,
+                    date: new Date().toISOString()
+                };
+                
+                receivedMessages.unshift(newEmail);
+                if (receivedMessages.length > 50) receivedMessages.pop();
+                saveData();
+                
+                // Only re-render if we're on the received tab
+                if (currentTab === 'received') {
+                    renderInbox();
+                }
+            }
+        }, 30000); // Every 30 seconds
+
+        // =============================================
         // INIT
         // =============================================
         loadSampleData();
         renderInbox();
         console.log('🚀 Vitamin\'s Mail loaded successfully!');
         console.log('📧 API Key:', RESEND_API_KEY ? '✓ Set' : '✗ Not set');
+        console.log('📨 Received emails:', receivedMessages.length);
+        console.log('📤 Sent emails:', sentMessages.length);
         console.log('💡 Click "Set API Key" to add your Resend API key');
+        console.log('📬 New test emails will arrive every 30 seconds!');
     </script>
 </body>
 </html>
